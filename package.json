@@ -1,0 +1,28 @@
+{
+  "name": "restapiexample",
+  "version": "1.0.0",
+  "description": "Rest API Example",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":" nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "RestAPIExample"
+  },
+  "author": "Samadhan",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^3.0.0",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "express-jwt": "^5.3.1",
+    "fs": "0.0.1-security",
+    "mongoose": "^5.2.8"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.3"
+  }
+}
