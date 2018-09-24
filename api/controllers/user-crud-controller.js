@@ -30,7 +30,8 @@ exports.add_users=function(req,res){
                 state:req.body.state,
                 country:req.body.country,
                 zip:req.body.zip,
-                contact:req.body.contact
+                contact:req.body.contact,
+                role:req.body.role
             })
             console.log("User Details:",JSON.stringify(userDetails));
             userDetails.save();
@@ -79,7 +80,8 @@ exports.signIn=function(req,res,next){
                             {expiresIn:'2hr'});
                         return res.status(200).json({
                             success:true,message:"Welcome to the JWT Auth",
-                            token:JWTToken
+                            token:JWTToken,
+                            role:user.role
                         });
                     }
                 });
@@ -97,10 +99,17 @@ exports.signIn=function(req,res,next){
 exports.display_products=function(req,res){
     console.log("Successfully called display product functionality");
     try{
-        ProductDetails.find({},function(err,prods){
-            if(err)console.log(err)
-                res.json({result:prods});
-        });
+        // ProductDetails.find({},function(err,prods){
+        //     if(err)console.log(err)
+        //         res.json({result:prods});
+        // });
+        ProductDetails.aggregate([{$lookup:{
+            from:"category",localField:"categoryId",foreignField:"id",
+            as:"product_docs"
+            }}],function(err,prods) {
+                if(err)console.log(err)
+                    res.json({result:prods});
+            });
     }catch(err){
         console.log(err);
         res.json({result:"Error"});
@@ -122,3 +131,44 @@ module.exports.display_category=function(req,res){
     
 }
 /*End of Product Display Functionality */
+
+/*Start of Product Update Functionality */
+module.exports.update_product=function(req,res){
+    ProductDetails.update({_id:req.body.id},{
+        name:req.body.name,
+        price:req.body.price,
+        description:req.body.description  
+    },function(err){
+        if(err) console.log("Error=>",err);
+        res.json({message:"Product ("+req.body.id+") Update Request is successful"});
+    });
+}
+/*End of Product Update Functionality */
+/*Start of Product Delete Functionality */
+module.exports.delete_product=function(req,res){
+    console.log("Param::",req.params);
+    let objectId=mongoose.Types.ObjectId.createFromHexString(req.params.id);
+    ProductDetails.deleteOne({_id:objectId},function(err,data){
+        if(err){
+            console.log("Error::",err);
+            res.json({message:"Request is not completed",status:false});
+        }else{
+            res.json({message:"Request is completed successfully",status:true});
+        }
+    });
+}
+/*End of Product Delete Functionality */
+/*Start of Product Insert Functionality */
+module.exports.insert_product=function(req,res){
+    console.log("Body:",req.body);
+    let info={name:req.body.name,price:req.body.price,description:req.body.description,categoryId:req.body.categoryId};
+    let product=new ProductDetails(info);
+    product.save(function(err,result){
+        if(err)
+            console.log("Error::",err);
+        res.json({message:"Product is successfully inserted..",status:true});
+    });
+}
+
+
+/*End of Product Insert Functionality */

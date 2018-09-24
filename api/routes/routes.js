@@ -11,9 +11,18 @@ module.exports=function(app){
     app.route('/sign-in').post(controllers.signIn);
     /* End of User Registration API configuration*/
     /* Start of Product display API configuration*/
-    app.route('/display-product').get(controllers.display_products);
+    app.route('/display-products').get(controllers.display_products);
     /* End of Product display API configuration*/
     /* Start of Display Category API configuration*/
     app.route('/display-category').get(controllers.display_category);
     /* End of Display Category API configuration*/
+    /* Start of Product Update API configuration*/
+    app.route('/product-update/:id').patch(controllers.update_product);
+    /* End of Product Update API configuration*/
+    /*Start of Product Delete Functionality */
+    app.route('/product-delete/:id').delete(controllers.delete_product);
+    /*End of Product Delete Functionality */
+    /*Start of Product Delete Functionality */
+    app.route('/product-insert').post(controllers.insert_product);
+    /*End of Product Delete Functionality */
 }

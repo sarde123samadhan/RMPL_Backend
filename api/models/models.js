@@ -15,7 +15,8 @@ var CustomerSchema=new Schema({
    state:{type:String},
    country:{type:String},
    zip:{type:Number},
-   contact:{type:Number}
+   contact:{type:Number},
+   role:{type:String}
 });
 
 var productSchema=new Schema({
